@@ -13,7 +13,10 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		staminaBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Math.round(FlxG.width * 0.9), Math.round(FlxG.height * 0.1), this, 'stamina', 0, 1, false);
+		staminaBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Math.round(FlxG.width * 0.9), Math.round(FlxG.height * 0.05), this, 'stamina', 0, 1, false);
+		add(staminaBar);
+
+		staminaBar.screenCenter();
 	}
 
 	override public function update(elapsed:Float)
@@ -23,14 +26,22 @@ class PlayState extends FlxState
 		final spriting:Bool = FlxG.keys.pressed.SHIFT;
 		final moving:Bool = FlxG.keys.anyPressed([W, A, S, D, LEFT, DOWN, UP, RIGHT]);
 
-		if (!moving)
+		if (moving)
 		{
 			if (spriting)
+				stamina -= .2;
+			else
 				stamina -= .1;
 		}
 		else
 		{
 			stamina += .025;
 		}
+
+		if (stamina > 1)
+			stamina = 1;
+
+		if (stamina < 0)
+			stamina = 0;
 	}
 }
