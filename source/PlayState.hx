@@ -52,18 +52,17 @@ class PlayState extends FlxState
 					tmr.time *= FlxG.random.float(0.1, 2.5);
 				else
 					tmr.time *= FlxG.random.float(0.1, 0.9);
+			else if (tmr.time < 1)
+				tmr.time *= FlxG.random.float(0.9, 1.1);
 
 			var obstacle:Obstacle = new Obstacle();
 			obstacle.setPosition(player.x, player.y);
 
 			obstacle.x *= 8;
-			obstacle.y += FlxG.random.float(-230, 245);
-
-			obstacle.velocity.add(-400, -200);
-			obstacle.acceleration.add(-800, FlxG.random.float(75, 135));
+			obstacle.y -= FlxG.random.float(player.y * -0.5, player.y * 0.9);
 
 			FlxTween.tween(obstacle, {alpha: 0}, 1, {
-				startDelay: FlxG.random.float(1, 2),
+				startDelay: FlxG.random.float(1, 3),
 				onUpdate: function(twn)
 				{
 					if (obstacle.overlaps(player))
@@ -98,15 +97,15 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 
-		for (obst in obstacles.members)
+		for (obstacle in obstacles.members)
 		{
-			if (obst == null)
+			if (obstacle == null)
 			{
-				obstacles.members.remove(obst);
+				obstacles.members.remove(obstacle);
 				continue;
 			}
 
-			obst.acceleration.y += FlxG.random.float(2, 10) * 3;
+			obstacle.x -= obstacle.width * 0.4;
 		}
 
 		final spriting:Bool = FlxG.keys.pressed.SHIFT;
