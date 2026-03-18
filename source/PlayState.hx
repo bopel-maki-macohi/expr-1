@@ -22,6 +22,7 @@ class PlayState extends FlxState
 		add(staminaBar);
 
 		staminaBar.screenCenter();
+		staminaBar.y = FlxG.height * 0.95;
 	}
 
 	override public function update(elapsed:Float)
