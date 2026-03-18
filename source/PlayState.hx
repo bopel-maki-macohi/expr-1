@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -13,9 +14,20 @@ class PlayState extends FlxState
 	public var stamina:Float = 1;
 	public var staminaBar:FlxBar;
 
+	public var player:FlxSprite;
+
 	override public function create()
 	{
 		super.create();
+
+		player = new FlxSprite();
+		player.loadGraphic('assets/images/dude.png', true, 64, 64);
+		player.animation.add('runnin', [0, 1], 24);
+		player.animation.add('jump', [2, 3], 24, false);
+		add(player);
+
+		player.screenCenter();
+		player.x *= 0.9;
 
 		staminaBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Math.round(FlxG.width * 0.9), Math.round(FlxG.height * 0.05), this, 'stamina', 0, STAMINA_MAX, false);
 		staminaBar.createFilledBar(FlxColor.RED, FlxColor.LIME, false, FlxColor.BLACK, 1);
