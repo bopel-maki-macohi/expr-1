@@ -61,5 +61,15 @@ class PlayState extends FlxState
 
 		if (stamina < 0)
 			stamina = 0;
+
+		if (player.animation.name == 'runnin')
+			if (spriting)
+				player.animation.timeScale = 1 + stamina / STAMINA_MAX;
+			else
+				player.animation.timeScale = FlxMath.lerp(player.animation.timeScale, 1.0, 1 / 32);
+		else
+			player.animation.timeScale = 1.0;
+		
+		player.animation.play('runnin');
 	}
 }
