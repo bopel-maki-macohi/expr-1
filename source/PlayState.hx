@@ -47,13 +47,13 @@ class PlayState extends FlxState
 		if (moving)
 		{
 			if (spriting)
-				stamina -= 0.1;
+				stamina -= 1 / 10;
 			else
-				stamina -= 0.025;
+				stamina -= 1 / 64;
 		}
 		else
 		{
-			stamina += 0.08;
+			stamina += 8 / 100;
 		}
 
 		if (stamina > STAMINA_MAX)
@@ -71,6 +71,8 @@ class PlayState extends FlxState
 					target += (stamina / STAMINA_MAX) * 4;
 				else
 					target += (stamina / STAMINA_MAX) * 2;
+			else
+				target += (stamina / STAMINA_MAX) * 0.5;
 
 			player.animation.timeScale = FlxMath.lerp(player.animation.timeScale, target, 1 / 32);
 		}
