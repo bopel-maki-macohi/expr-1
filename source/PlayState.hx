@@ -45,10 +45,10 @@ class PlayState extends FlxState
 		staminaBar.screenCenter();
 		staminaBar.y = FlxG.height * 0.9;
 
-		new FlxTimer().start(2, function(tmr)
+		new FlxTimer().start(1, function(tmr)
 		{
 			if (FlxG.random.bool(5))
-				if (tmr.time < 5)
+				if (tmr.time < 4)
 					tmr.time *= FlxG.random.float(0.1, 2.5);
 				else
 					tmr.time *= FlxG.random.float(0.1, 0.9);
@@ -57,9 +57,10 @@ class PlayState extends FlxState
 			obstacle.setPosition(player.x, player.y);
 
 			obstacle.x *= 8;
+			obstacle.y += FlxG.random.float(-230, 245);
 
-			obstacle.acceleration.add(-400, -FlxG.random.float(15, 35));
-			obstacle.velocity.add(-400);
+			obstacle.velocity.add(-400, -200);
+			obstacle.acceleration.add(-800, FlxG.random.float(75, 135));
 
 			FlxTween.tween(obstacle, {alpha: 0}, 1, {
 				startDelay: FlxG.random.float(1, 2),
@@ -105,7 +106,7 @@ class PlayState extends FlxState
 				continue;
 			}
 
-			obst.acceleration.y *= -0.9;
+			obst.acceleration.y += FlxG.random.float(2, 10) * 3;
 		}
 
 		final spriting:Bool = FlxG.keys.pressed.SHIFT;
