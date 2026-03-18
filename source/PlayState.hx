@@ -22,8 +22,8 @@ class PlayState extends FlxState
 
 		player = new FlxSprite();
 		player.loadGraphic('assets/images/dude.png', true, 64, 64);
-		player.animation.add('runnin', [0, 1], 24);
-		player.animation.add('jump', [2, 3], 24, false);
+		player.animation.add('runnin', [0, 1], 6);
+		player.animation.add('jump', [2, 3], 6, false);
 		add(player);
 
 		player.screenCenter();
