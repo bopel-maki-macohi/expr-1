@@ -27,7 +27,7 @@ class PlayState extends FlxState
 		add(player);
 
 		player.screenCenter();
-		player.x *= 0.9;
+		player.x *= 0.5;
 
 		staminaBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Math.round(FlxG.width * 0.9), Math.round(FlxG.height * 0.05), this, 'stamina', 0, STAMINA_MAX, false);
 		staminaBar.createFilledBar(FlxColor.RED, FlxColor.LIME, false, FlxColor.BLACK, 1);
