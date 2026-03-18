@@ -63,13 +63,20 @@ class PlayState extends FlxState
 			stamina = 0;
 
 		if (player.animation.name == 'runnin')
-			if (spriting)
-				player.animation.timeScale = 1 + stamina / STAMINA_MAX;
-			else
-				player.animation.timeScale = FlxMath.lerp(player.animation.timeScale, 1.0, 1 / 32);
+		{
+			var target = 1.0;
+
+			if (moving)
+				if (spriting)
+					target += (stamina / STAMINA_MAX) * 4;
+				else
+					target += (stamina / STAMINA_MAX) * 2;
+
+			player.animation.timeScale = FlxMath.lerp(player.animation.timeScale, target, 1 / 32);
+		}
 		else
 			player.animation.timeScale = 1.0;
-		
+
 		player.animation.play('runnin');
 	}
 }
