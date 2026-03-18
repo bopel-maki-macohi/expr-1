@@ -1,5 +1,9 @@
 package;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxTimer;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
@@ -16,6 +20,8 @@ class PlayState extends FlxState
 
 	public var player:FlxSprite;
 
+	public var obstacles:FlxTypedGroup<Obstacle>;
+
 	override public function create()
 	{
 		super.create();
@@ -29,17 +35,78 @@ class PlayState extends FlxState
 		player.screenCenter();
 		player.x *= 0.5;
 
+		obstacles = new FlxTypedGroup<Obstacle>();
+		add(obstacles);
+
 		staminaBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Math.round(FlxG.width * 0.9), Math.round(FlxG.height * 0.05), this, 'stamina', 0, STAMINA_MAX, false);
 		staminaBar.createFilledBar(FlxColor.RED, FlxColor.LIME, false, FlxColor.BLACK, 1);
 		add(staminaBar);
 
 		staminaBar.screenCenter();
 		staminaBar.y = FlxG.height * 0.9;
+
+		new FlxTimer().start(2, function(tmr)
+		{
+			if (FlxG.random.bool(5))
+				if (tmr.time < 5)
+					tmr.time *= FlxG.random.float(0.1, 2.5);
+				else
+					tmr.time *= FlxG.random.float(0.1, 0.9);
+
+			var obstacle:Obstacle = new Obstacle();
+			obstacle.setPosition(player.x, player.y);
+
+			obstacle.x *= 8;
+
+			obstacle.acceleration.add(-400, -FlxG.random.float(15, 35));
+			obstacle.velocity.add(-400);
+
+			FlxTween.tween(obstacle, {alpha: 0}, 1, {
+				startDelay: FlxG.random.float(1, 2),
+				onUpdate: function(twn)
+				{
+					if (obstacle.overlaps(player))
+					{
+						obstacles.members.remove(obstacle);
+						obstacle.destroy();
+						obstacle = null;
+
+						trace('U GOT HIT');
+						twn.cancel();
+					}
+
+					if (obstacle == null)
+					{
+						twn.cancel();
+					}
+				},
+				onComplete: function(twn)
+				{
+					obstacles.members.remove(obstacle);
+					obstacle.destroy();
+					obstacle = null;
+				},
+				ease: FlxEase.sineInOut
+			});
+
+			obstacles.add(obstacle);
+		}, 0);
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		for (obst in obstacles.members)
+		{
+			if (obst == null)
+			{
+				obstacles.members.remove(obst);
+				continue;
+			}
+
+			obst.acceleration.y *= -0.9;
+		}
 
 		final spriting:Bool = FlxG.keys.pressed.SHIFT;
 		final moving:Bool = FlxG.keys.anyPressed([W, A, S, D, LEFT, DOWN, UP, RIGHT]);
